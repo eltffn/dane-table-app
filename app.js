@@ -199,15 +199,45 @@ function collectAndSave() {
 }
 
 function deleteRow(index) {
+  if (!adminLoggedIn) return;
+
+  // Remove from all columns
   columns.forEach(col => {
     if (data[col] && data[col].length > index) {
       data[col].splice(index, 1);
     }
   });
-  originalOrder = originalOrder.filter(i => i !== index).map(i => i > index ? i - 1 : i);
-  filteredIndices = filteredIndices.filter(i => i !== index).map(i => i > index ? i - 1 : i);
-  collectAndSave();
-  buildTable();
+
+  // Update ordering arrays
+  originalOrder = originalOrder
+    .filter(i => i !== index)
+    .map(i => i > index ? i - 1 : i);
+
+  filteredIndices = filteredIndices
+    .filter(i => i !== index)
+    .map(i => i > index ? i - 1 : i);
+
+  // 🔥 SAVE DIRECTLY (not collectAndSave)
+  fetch('/api/data', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': adminToken
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      console.log('✓ Row deleted');
+      buildTable();
+    } else {
+      console.error('Delete failed:', result.error);
+    }
+  })
+  .catch(err => {
+    console.error('Delete error:', err);
+  });
 }
 
 function filterBySearch() {
