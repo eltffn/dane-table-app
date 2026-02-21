@@ -42,8 +42,6 @@ app.post('/api/data', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  console.log(`Data file: ${DATA_FILE}`);
-  console.log(`Edit protection: ${EDIT_TOKEN === 'changeme' ? 'NO (default token in use)' : 'YES'}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
