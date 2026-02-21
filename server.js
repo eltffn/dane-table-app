@@ -27,6 +27,17 @@ app.get('/api/data', (req, res) => {
 // POST /api/data - autosave updates to dane.json
 app.post('/api/data', (req, res) => {
   const token = req.get('x-api-key') || req.query.token;
+
+  // VERIFY PASSWORD ONLY
+  if (req.query.action === 'verify') {
+    if (token === EDIT_TOKEN) {
+      return res.json({ authorized: true });
+    } else {
+      return res.json({ authorized: false });
+    }
+  }
+
+  // NORMAL SAVE
   if (token !== EDIT_TOKEN) {
     console.warn('[unauthorized] save attempt from', req.ip);
     return res.status(401).json({ error: 'Unauthorized' });
@@ -36,13 +47,9 @@ app.post('/api/data', (req, res) => {
     const data = req.body;
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
     console.log('[autosave]', new Date().toISOString(), '- dane.json updated');
-    res.json({ success: true, message: 'Data saved' });
+    res.json({ success: true });
   } catch (err) {
     console.error('Error writing dane.json:', err);
     res.status(500).json({ error: 'Failed to save data' });
   }
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
 });
