@@ -28,7 +28,7 @@ app.get('/api/data', (req, res) => {
 app.post('/api/data', (req, res) => {
   const token = req.get('x-api-key') || req.query.token;
 
-  // VERIFY PASSWORD ONLY
+  // Verify password only
   if (req.query.action === 'verify') {
     if (token === EDIT_TOKEN) {
       return res.json({ authorized: true });
@@ -37,7 +37,7 @@ app.post('/api/data', (req, res) => {
     }
   }
 
-  // NORMAL SAVE
+  // Normal save
   if (token !== EDIT_TOKEN) {
     console.warn('[unauthorized] save attempt from', req.ip);
     return res.status(401).json({ error: 'Unauthorized' });
