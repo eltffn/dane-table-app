@@ -472,7 +472,7 @@ document.getElementById('saveYear').addEventListener('click', () => {
 
   // Store year inside main data object
   if (!data) data = {};
-data.yearText = yearText;
+  data.yearText = yearText;
 
   fetch('/api/data', {
     method: 'POST',
@@ -497,6 +497,7 @@ data.yearText = yearText;
     alert('Save failed');
   });
 });
+}
 
 // Initialize
 window.addEventListener('load', () => {
@@ -519,4 +520,3 @@ window.addEventListener('load', () => {
   
   loadData();
 });
-}
