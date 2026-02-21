@@ -379,10 +379,10 @@ function setupAdminPanel() {
         msgEl.classList.add('success');
 
         const passwordBox = document.getElementById('passwordBox');
-if (passwordBox) passwordBox.style.display = 'none';
+        if (passwordBox) passwordBox.style.display = 'none';
         document.getElementById('adminPassword').value = '';
         const adminContent = document.getElementById('adminContent');
-if (adminContent) adminContent.style.display = 'block';
+        if (adminContent) adminContent.style.display = 'block';
 
         buildTable();
       } else {
@@ -467,36 +467,36 @@ if (adminContent) adminContent.style.display = 'block';
     document.getElementById('yearEditorModal').classList.remove('show');
   });
 
-document.getElementById('saveYear').addEventListener('click', () => {
-  const yearText = document.getElementById('yearInput').value;
+  document.getElementById('saveYear').addEventListener('click', () => {
+    const yearText = document.getElementById('yearInput').value;
 
-  // Store year inside main data object
-  if (!data) data = {};
-  data.yearText = yearText;
+    // Store year inside main data object
+    if (!data) data = {};
+    data.yearText = yearText;
 
-  fetch('/api/data', {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'x-api-key': adminToken
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(result => {
-    if (result.success) {
-      document.getElementById('yearText').textContent = yearText;
-      document.getElementById('yearEditorModal').classList.remove('show');
-      alert('Year text saved!');
-    } else {
-      alert('Error saving year');
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert('Save failed');
+    fetch('/api/data', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': adminToken
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (result.success) {
+        document.getElementById('yearText').textContent = yearText;
+        document.getElementById('yearEditorModal').classList.remove('show');
+        alert('Year text saved!');
+      } else {
+        alert('Error saving year');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Save failed');
+    });
   });
-});
 }
 
 // Initialize
