@@ -10,10 +10,11 @@ const API_URL = window.location.origin + '/api/data';
 // Load year text from local storage or file
 async function loadYearText() {
   try {
-    const res = await fetch(API_URL + '?action=getYear');
+    const res = await fetch('/api/year');
     if (res.ok) {
       const result = await res.json();
-      document.getElementById('yearText').textContent = result.year || 'Year: 1444';
+      document.getElementById('yearText').textContent =
+        result.year || 'Year: 1444';
     }
   } catch (e) {
     document.getElementById('yearText').textContent = 'Year: 1444';
@@ -32,7 +33,7 @@ async function loadData() {
     data = {};
   }
   
-  columns = Object.keys(data);
+  columns = Object.keys(data).filter(col => col !== 'yearText');
   const rowCount = Math.max(...columns.map(c => (data[c] || []).length), 0);
   originalOrder = Array.from({ length: rowCount }, (_, i) => i);
   filteredIndices = [...originalOrder];
@@ -467,36 +468,32 @@ function setupAdminPanel() {
     document.getElementById('yearEditorModal').classList.remove('show');
   });
 
-  document.getElementById('saveYear').addEventListener('click', () => {
-    const yearText = document.getElementById('yearInput').value;
+document.getElementById('saveYear').addEventListener('click', () => {
+  const yearText = document.getElementById('yearInput').value;
 
-    // Store year inside main data object
-    if (!data) data = {};
-    data.yearText = yearText;
-
-    fetch('/api/data', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'x-api-key': adminToken
-      },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) {
-        document.getElementById('yearText').textContent = yearText;
-        document.getElementById('yearEditorModal').classList.remove('show');
-        alert('Year text saved!');
-      } else {
-        alert('Error saving year');
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Save failed');
-    });
+  fetch('/api/year', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': adminToken
+    },
+    body: JSON.stringify({ year: yearText })
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      document.getElementById('yearText').textContent = yearText;
+      document.getElementById('yearEditorModal').classList.remove('show');
+      alert('Year saved permanently!');
+    } else {
+      alert('Error saving year');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Save failed');
   });
+});
 }
 
 // Initialize
