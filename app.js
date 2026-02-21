@@ -4,6 +4,7 @@ let originalOrder = [];
 let filteredIndices = [];
 let adminLoggedIn = false;
 let adminPassword = '';
+let adminToken = '';
 const API_URL = window.location.origin + '/api/data';
 
 // Load year text from local storage or file
@@ -298,17 +299,18 @@ function setupAdminPanel() {
       return;
     }
     
-    fetch(API_URL + '?action=verify', {
+    fetch('/api/data?action=verify', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-edit-password': password },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': password },
       body: JSON.stringify({})
     })
     .then(res => res.json())
     .then(result => {
       const msgEl = document.getElementById('adminMessage');
       if (result.authorized) {
-        adminLoggedIn = true;
-        adminPassword = password;
+      adminLoggedIn = true;
+      adminPassword = password;
+      adminToken = password;
         msgEl.textContent = 'Password was Successful';
         msgEl.classList.remove('error');
         msgEl.classList.add('success');
@@ -359,9 +361,9 @@ function setupAdminPanel() {
   document.getElementById('saveJSON').addEventListener('click', () => {
     try {
       const newData = JSON.parse(document.getElementById('jsonContent').value);
-      fetch(API_URL, {
+      fetch('/api/data', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-edit-password': adminPassword },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': adminToken },
         body: JSON.stringify(newData)
       })
       .then(res => res.json())
@@ -389,9 +391,9 @@ function setupAdminPanel() {
   
   document.getElementById('saveYear').addEventListener('click', () => {
     const yearText = document.getElementById('yearInput').value;
-    fetch(API_URL + '?action=setYear', {
+    fetch('/api/data?action=setYear', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-edit-password': adminPassword },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': adminToken },
       body: JSON.stringify({ year: yearText })
     })
     .then(res => res.json())
