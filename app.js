@@ -471,7 +471,8 @@ document.getElementById('saveYear').addEventListener('click', () => {
   const yearText = document.getElementById('yearInput').value;
 
   // Store year inside main data object
-  data.yearText = yearText;
+  if (!data) data = {};
+data.yearText = yearText;
 
   fetch('/api/data', {
     method: 'POST',
