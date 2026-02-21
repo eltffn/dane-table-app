@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Awzanajom's Alternative History</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Hamburger Menu -->
+  <header class="topBar">
+    <button id="hamburger" class="hamburgerBtn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <h1>Awzanajom's Alternative History</h1>
+  </header>
+
+  <!-- Sidebar Menu -->
+  <nav id="sidebar" class="sidebar">
+    <ul>
+      <li><a href="#" data-view="map">Map</a></li>
+      <li><a href="#" data-view="data">Data</a></li>
+    </ul>
+  </nav>
+
+  <!-- Backdrop for sidebar -->
+  <div id="backdrop" class="backdrop"></div>
+
+  <!-- Main Content -->
+  <main id="mainContent" class="mainContent">
+    <!-- Map View -->
+    <div id="mapView" class="view active">
+      <div class="mapContainer">
+        <img id="mapImage" src="map.png" alt="World Map" class="mapImage" />
+      </div>
+      <div class="yearText" id="yearText">Year: 1444</div>
+    </div>
+
+    <!-- Data View -->
+    <div id="dataView" class="view">
+      <div class="dataControls">
+        <input type="text" id="search" placeholder="Search by Name or TAG (hex)..." />
+        <button id="download">Download JSON</button>
+        <button id="copy">Copy JSON</button>
+        <button id="adminPanel">Admin Panel</button>
+      </div>
+
+      <nav class="sortNav">
+        <label>Sort by:
+          <select id="sortColumn">
+            <option value="">— Select a column —</option>
+            <option value="Name">Name</option>
+            <option value="TAG">TAG (hex)</option>
+            <option value="Army">Army</option>
+            <option value="Stability">Stability</option>
+            <option value="Government">Government</option>
+            <option value="Religion">Religion</option>
+            <option value="Economy">Economy</option>
+            <option value="Note">Note</option>
+            <option value="Friends">Friends</option>
+            <option value="Enemies">Enemies</option>
+            <option value="Alliances">Alliances</option>
+            <option value="Wars">Wars</option>
+            <option value="Focus">Focus</option>
+          </select>
+        </label>
+        <label>
+          <input type="radio" name="sortDir" value="asc" checked /> A→Z
+        </label>
+        <label>
+          <input type="radio" name="sortDir" value="desc" /> Z→A
+        </label>
+        <button id="clearSort">Clear Sort</button>
+      </nav>
+
+      <div id="tableWrap"></div>
+    </div>
+
+    <!-- Admin Panel View -->
+    <div id="adminView" class="view">
+      <div class="adminPanel">
+        <h2>Admin Panel</h2>
+        <div class="passwordBox">
+          <input type="password" id="adminPassword" placeholder="Enter admin password..." />
+          <button id="adminLogin">Login</button>
+        </div>
+        <div id="adminMessage" class="adminMessage"></div>
+        <div id="adminContent" style="display:none; margin-top:20px;">
+          <button id="editJSON" style="padding:10px 20px; cursor:pointer; background:#4CAF50; color:white; margin-right:10px;">Edit JSON</button>
+          <button id="editYear" style="padding:10px 20px; cursor:pointer; background:#2196F3; color:white;">Edit Year Text</button>
+          <button id="logoutAdmin" style="padding:10px 20px; cursor:pointer; background:#f44336; color:white;">Logout</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- JSON Editor Modal -->
+  <div id="jsonEditorModal" class="modal">
+    <div class="modalContent">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2>Edit dane.json</h2>
+        <button id="closeJSON" style="padding:8px 16px; cursor:pointer;">Close</button>
+      </div>
+      <textarea id="jsonContent" style="width:100%; height:400px; font-family:monospace; padding:10px; border:1px solid #ccc;"></textarea>
+      <div style="margin-top:15px; gap:10px;">
+        <button id="saveJSON" style="padding:8px 16px; cursor:pointer; background:#4CAF50; color:white;">Save JSON</button>
+        <button id="cancelJSON" style="padding:8px 16px; cursor:pointer;">Cancel</button>
+        <span id="saveStatus" style="margin-left:10px;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Year Text Editor Modal -->
+  <div id="yearEditorModal" class="modal">
+    <div class="modalContent">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2>Edit Year Text</h2>
+        <button id="closeYear" style="padding:8px 16px; cursor:pointer;">Close</button>
+      </div>
+      <input type="text" id="yearInput" placeholder="Enter year text..." style="width:100%; padding:10px; border:1px solid #ccc; margin-bottom:15px;" />
+      <div style="gap:10px;">
+        <button id="saveYear" style="padding:8px 16px; cursor:pointer; background:#4CAF50; color:white;">Save</button>
+        <button id="cancelYear" style="padding:8px 16px; cursor:pointer;">Cancel</button>
+        <span id="yearStatus" style="margin-left:10px;"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

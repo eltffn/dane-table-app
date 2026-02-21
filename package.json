@@ -1,0 +1,17 @@
+{
+  "name": "dane-table-editor",
+  "version": "1.0.0",
+  "description": "Editable table with autosave backend for dane.json",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "start:live": "node server_live.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+    ,
+    "ws": "^8.13.0"
+  }
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Editable Table — dane.json (live)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Editable Table — dane.json (live)</h1>
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search by Name or TAG (hex)..." />
+      <button id="addRow">Add row</button>
+      <button id="download">Download JSON</button>
+      <button id="copy">Copy JSON</button>
+    </div>
+  </header>
+
+  <nav class="sortNav">
+    <label>Sort by:
+      <select id="sortColumn">
+        <option value="">— Select a column —</option>
+        <option value="Name">Name</option>
+        <option value="TAG">TAG (hex)</option>
+        <option value="Army">Army</option>
+        <option value="Stability">Stability</option>
+        <option value="Government">Government</option>
+        <option value="Religion">Religion</option>
+        <option value="Economy">Economy</option>
+        <option value="Note">Note</option>
+        <option value="Friends">Friends</option>
+        <option value="Enemies">Enemies</option>
+        <option value="Alliances">Alliances</option>
+        <option value="Wars">Wars</option>
+        <option value="Focus">Focus</option>
+      </select>
+    </label>
+    <label>
+      <input type="radio" name="sortDir" value="asc" checked /> A→Z
+    </label>
+    <label>
+      <input type="radio" name="sortDir" value="desc" /> Z→A
+    </label>
+    <button id="clearSort">Clear Sort</button>
+  </nav>
+
+  <main>
+    <div id="tableWrap"></div>
+  </main>
+
+  <script src="app_live.js"></script>
+</body>
+</html>

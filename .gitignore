@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Node (if using npm locally)
+node_modules/
+npm-debug.log
+
+# Environment variables (don't commit with real passwords!)
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# Keep these files - they're data:
+!dane.json
+!year.txt
+!map.png
