@@ -19,7 +19,8 @@ import sys
 DATA_FILE = os.path.join(os.path.dirname(__file__), 'dane.json')
 YEAR_FILE = os.path.join(os.path.dirname(__file__), 'year.txt')
 PORT = int(os.environ.get('PORT', 8000))
-EDIT_PASSWORD = os.environ.get('EDIT_PASSWORD', 'changeme')
+EDIT_TOKEN = os.getenv("EDIT_TOKEN", "changeme")
+print("Loaded EDIT_TOKEN:", EDIT_TOKEN)
 EDIT_MODE = os.environ.get('EDIT_MODE', 'full')  # full, readonly, json
 
 class AutosaveHandler(BaseHTTPRequestHandler):
@@ -119,11 +120,11 @@ class AutosaveHandler(BaseHTTPRequestHandler):
         query = parse_qs(parsed_path.query)
         
         if path == '/api/data':
-            password = self.headers.get('x-edit-password', '')
+            token = self.headers.get('x-api-key', '')
             
             # Check if this is a password verification request
             if 'action' in query and query['action'][0] == 'verify':
-                if password == EDIT_PASSWORD:
+                if token == EDIT_TOKEN:
                     self.send_response(200)
                     self.send_header('Content-Type', 'application/json')
                     self.send_header('Access-Control-Allow-Origin', '*')
@@ -139,7 +140,7 @@ class AutosaveHandler(BaseHTTPRequestHandler):
             
             # Handle year save
             if 'action' in query and query['action'][0] == 'setYear':
-                if password != EDIT_PASSWORD:
+                if token != EDIT_TOKEN:
                     self.send_response(401)
                     self.send_header('Content-Type', 'application/json')
                     self.end_headers()
@@ -166,7 +167,7 @@ class AutosaveHandler(BaseHTTPRequestHandler):
                 return
             
             # Regular data save - check password
-            if password != EDIT_PASSWORD:
+            if token != EDIT_TOKEN:
                 self.send_response(401)
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
