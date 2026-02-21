@@ -10,11 +10,11 @@ const API_URL = window.location.origin + '/api/data';
 // Load year text from local storage or file
 async function loadYearText() {
   try {
-    const res = await fetch('/api/year');
+    const res = await fetch(API_URL);
     if (res.ok) {
       const result = await res.json();
       document.getElementById('yearText').textContent =
-        result.year || 'Year: 1444';
+        result.yearText || 'Year: 1444';
     }
   } catch (e) {
     document.getElementById('yearText').textContent = 'Year: 1444';
@@ -471,13 +471,16 @@ function setupAdminPanel() {
 document.getElementById('saveYear').addEventListener('click', () => {
   const yearText = document.getElementById('yearInput').value;
 
-  fetch('/api/year', {
+  // Update local data object
+  data.yearText = yearText;
+
+  fetch('/api/data', {
     method: 'POST',
-    headers: {
+    headers: { 
       'Content-Type': 'application/json',
       'x-api-key': adminToken
     },
-    body: JSON.stringify({ year: yearText })
+    body: JSON.stringify(data)   // SEND FULL DATA OBJECT
   })
   .then(res => res.json())
   .then(result => {
