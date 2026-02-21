@@ -519,3 +519,4 @@ window.addEventListener('load', () => {
   
   loadData();
 });
+}
