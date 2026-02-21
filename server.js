@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const EDIT_TOKEN = process.env.EDIT_TOKEN || 'changeme';
+console.log("EDIT_TOKEN loaded:", process.env.EDIT_TOKEN ? "YES" : "NO (using default)");
 const DATA_FILE = path.join(__dirname, 'dane.json');
 
 app.use(cors());
