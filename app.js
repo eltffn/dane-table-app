@@ -148,25 +148,54 @@ function buildTable() {
 function collectAndSave() {
   const out = {};
   columns.forEach(col => out[col] = []);
+
   const rows = document.querySelectorAll('#dataTable tbody tr');
+
   rows.forEach((tr, displayIdx) => {
     const r = filteredIndices[displayIdx];
     const tds = tr.querySelectorAll('td');
     let colIdx = 1; // Skip rank column
+
     columns.forEach(col => {
       const td = tds[colIdx];
       let val = '';
+
       if (col.toLowerCase() === 'tag') {
         const inp = td.querySelector('input');
         val = inp ? inp.value : '';
       } else {
         val = td.querySelector('.cellEditable')?.textContent || '';
       }
+
       out[col][r] = val;
       colIdx++;
     });
   });
+
   data = out;
+
+  // 🔥 ACTUAL SAVE TO SERVER
+  if (adminLoggedIn && adminToken) {
+    fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': adminToken
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (!result.success) {
+        console.error('Save failed:', result.error);
+      } else {
+        console.log('✓ Autosaved');
+      }
+    })
+    .catch(err => {
+      console.error('Autosave error:', err);
+    });
+  }
 }
 
 function deleteRow(index) {
