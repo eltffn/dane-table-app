@@ -15,7 +15,7 @@ const YEAR_FILE = path.join(DATA_DIR, 'year.json');
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static(ROOT));
+app.use(express.static(__dirname));
 
 // Simple per-file promise-queue to avoid races
 const locks = new Map();
