@@ -287,36 +287,42 @@ function setupAdminPanel() {
   const logoutBtn = document.getElementById('logoutAdmin');
   const editJsonBtn = document.getElementById('editJSON');
   const editYearBtn = document.getElementById('editYear');
-  
+
   adminBtn.addEventListener('click', () => {
     showView('admin');
   });
-  
+
+  // LOGIN
   adminLogin.addEventListener('click', () => {
     const password = document.getElementById('adminPassword').value;
     if (!password) {
       alert('Enter password');
       return;
     }
-    
-    fetch('/api/data?action=verify', {
+
+    fetch('/api/verify', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': password },
-      body: JSON.stringify({})
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': password
+      }
     })
     .then(res => res.json())
     .then(result => {
       const msgEl = document.getElementById('adminMessage');
+
       if (result.authorized) {
-      adminLoggedIn = true;
-      adminPassword = password;
-      adminToken = password;
+        adminLoggedIn = true;
+        adminToken = password;
+
         msgEl.textContent = 'Password was Successful';
         msgEl.classList.remove('error');
         msgEl.classList.add('success');
+
         document.getElementById('passwordBox').style.display = 'none';
         document.getElementById('adminPassword').value = '';
         document.getElementById('adminContent').style.display = 'block';
+
         buildTable();
       } else {
         msgEl.textContent = 'Password was Unsuccessful';
@@ -329,41 +335,44 @@ function setupAdminPanel() {
       alert('Error verifying password');
     });
   });
-  
+
+  // LOGOUT
   logoutBtn.addEventListener('click', () => {
     adminLoggedIn = false;
-    adminPassword = '';
+    adminToken = '';
+
     document.getElementById('adminContent').style.display = 'none';
     document.getElementById('adminMessage').textContent = '';
     document.getElementById('passwordBox').style.display = 'flex';
     document.getElementById('adminPassword').value = '';
+
     buildTable();
   });
-  
+
+  // JSON EDIT
   editJsonBtn.addEventListener('click', () => {
     document.getElementById('jsonEditorModal').classList.add('show');
     document.getElementById('jsonContent').value = JSON.stringify(data, null, 2);
   });
-  
-  editYearBtn.addEventListener('click', () => {
-    document.getElementById('yearEditorModal').classList.add('show');
-    document.getElementById('yearInput').value = document.getElementById('yearText').textContent;
-  });
-  
+
   document.getElementById('closeJSON').addEventListener('click', () => {
     document.getElementById('jsonEditorModal').classList.remove('show');
   });
-  
+
   document.getElementById('cancelJSON').addEventListener('click', () => {
     document.getElementById('jsonEditorModal').classList.remove('show');
   });
-  
+
   document.getElementById('saveJSON').addEventListener('click', () => {
     try {
       const newData = JSON.parse(document.getElementById('jsonContent').value);
+
       fetch('/api/data', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': adminToken },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-api-key': adminToken
+        },
         body: JSON.stringify(newData)
       })
       .then(res => res.json())
@@ -376,24 +385,36 @@ function setupAdminPanel() {
           alert('Error: ' + result.error);
         }
       });
+
     } catch (e) {
       alert('Invalid JSON: ' + e.message);
     }
   });
-  
+
+  // YEAR EDIT
+  editYearBtn.addEventListener('click', () => {
+    document.getElementById('yearEditorModal').classList.add('show');
+    document.getElementById('yearInput').value =
+      document.getElementById('yearText').textContent;
+  });
+
   document.getElementById('closeYear').addEventListener('click', () => {
     document.getElementById('yearEditorModal').classList.remove('show');
   });
-  
+
   document.getElementById('cancelYear').addEventListener('click', () => {
     document.getElementById('yearEditorModal').classList.remove('show');
   });
-  
+
   document.getElementById('saveYear').addEventListener('click', () => {
     const yearText = document.getElementById('yearInput').value;
-    fetch('/api/data?action=setYear', {
+
+    fetch('/api/data', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': adminToken },
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': adminToken
+      },
       body: JSON.stringify({ year: yearText })
     })
     .then(res => res.json())
