@@ -347,10 +347,43 @@ function setupAdminPanel() {
   const logoutBtn = document.getElementById('logoutAdmin');
   const editJsonBtn = document.getElementById('editJSON');
   const editYearBtn = document.getElementById('editYear');
+  const restoreBtn = document.getElementById('restoreDefault');
 
   adminBtn.addEventListener('click', () => {
     showView('admin');
   });
+restoreBtn.addEventListener('click', () => {
+  if (!adminLoggedIn) {
+    alert('Login as admin first.');
+    return;
+  }
+
+  const confirmRestore = confirm(
+    'Are you sure you want to restore default data? This will overwrite everything.'
+  );
+
+  if (!confirmRestore) return;
+
+  fetch('/api/restore', {
+    method: 'POST',
+    headers: {
+      'x-api-key': adminToken
+    }
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      alert('Default data restored successfully!');
+      location.reload(); // reload to refresh table
+    } else {
+      alert('Restore failed.');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Restore error.');
+  });
+});
 
   // LOGIN
   adminLogin.addEventListener('click', () => {

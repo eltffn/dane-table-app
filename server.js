@@ -47,22 +47,23 @@ app.post('/api/verify', (req, res) => {
 // =============================
 // SAVE DATA
 // =============================
-app.post('/api/data', (req, res) => {
-  const token = req.get('x-api-key');
+app.post('/api/restore', (req, res) => {
+  const apiKey = req.headers['x-api-key'];
 
-  if (token !== EDIT_TOKEN) {
-    console.warn('[unauthorized] save attempt from', req.ip);
-    return res.status(401).json({ error: 'Unauthorized' });
+  if (apiKey !== ADMIN_PASSWORD) {
+    return res.status(403).json({ success: false, error: 'Unauthorized' });
   }
 
+  const fs = require('fs');
+
   try {
-    const data = req.body;
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
-    console.log('[autosave]', new Date().toISOString(), '- dane.json updated');
+    const defaultData = fs.readFileSync('default.json', 'utf8');
+    fs.writeFileSync('dane.json', defaultData);
+
     res.json({ success: true });
   } catch (err) {
-    console.error('Error writing dane.json:', err);
-    res.status(500).json({ error: 'Failed to save data' });
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Restore failed' });
   }
 });
 
