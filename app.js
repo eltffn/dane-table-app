@@ -467,27 +467,35 @@ if (adminContent) adminContent.style.display = 'block';
     document.getElementById('yearEditorModal').classList.remove('show');
   });
 
-  document.getElementById('saveYear').addEventListener('click', () => {
-    const yearText = document.getElementById('yearInput').value;
+document.getElementById('saveYear').addEventListener('click', () => {
+  const yearText = document.getElementById('yearInput').value;
 
-    fetch('/api/data', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'x-api-key': adminToken
-      },
-      body: JSON.stringify({ year: yearText })
-    })
-    .then(res => res.json())
-    .then(result => {
-      if (result.success) {
-        document.getElementById('yearText').textContent = yearText;
-        document.getElementById('yearEditorModal').classList.remove('show');
-        alert('Year text saved!');
-      }
-    });
+  // Store year inside main data object
+  data.yearText = yearText;
+
+  fetch('/api/data', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'x-api-key': adminToken
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      document.getElementById('yearText').textContent = yearText;
+      document.getElementById('yearEditorModal').classList.remove('show');
+      alert('Year text saved!');
+    } else {
+      alert('Error saving year');
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Save failed');
   });
-}
+});
 
 // Initialize
 window.addEventListener('load', () => {
