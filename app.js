@@ -319,9 +319,11 @@ function setupAdminPanel() {
         msgEl.classList.remove('error');
         msgEl.classList.add('success');
 
-        document.getElementById('passwordBox').style.display = 'none';
+        const passwordBox = document.getElementById('passwordBox');
+if (passwordBox) passwordBox.style.display = 'none';
         document.getElementById('adminPassword').value = '';
-        document.getElementById('adminContent').style.display = 'block';
+        const adminContent = document.getElementById('adminContent');
+if (adminContent) adminContent.style.display = 'block';
 
         buildTable();
       } else {
